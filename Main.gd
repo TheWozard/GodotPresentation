@@ -41,12 +41,7 @@ func load_slide(node: Slide, direction: int):
 
 func set_slide_index(index: int, direction: int):
 	var prev_index = slide_index
-	if index < len(slides) && index >= 0:
-		slide_index = index
-	elif index >= len(slides):
-		slide_index = len(slides) -1
-	else:
-		slide_index = 0
+	slide_index = clamp(index, 0, len(slides) -1)
 	if prev_index != slide_index:
 		var slide = slides[slide_index]
 		load_slide(slide.instance(), direction)
