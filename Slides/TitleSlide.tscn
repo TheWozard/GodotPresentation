@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://Slides/Slide.tscn" type="PackedScene" id=1]
-[ext_resource path="res://Resources/godotengine-icon.svg" type="Texture" id=2]
+[ext_resource path="res://Resources/godot-icon.svg" type="Texture" id=2]
 [ext_resource path="res://Fonts/NotoSans-ExtraBold.tres" type="DynamicFont" id=3]
 [ext_resource path="res://Fonts/NotoSans-ExtraLight.tres" type="DynamicFont" id=4]
 

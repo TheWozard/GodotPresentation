@@ -1,0 +1,127 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://Slides/Slide.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Objects/Unity.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Fonts/NotoSans-Regular.tres" type="DynamicFont" id=3]
+[ext_resource path="res://Fonts/NotoSans-ExtraBold.tres" type="DynamicFont" id=4]
+[ext_resource path="res://Objects/Godot.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Objects/Unreal.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Objects/Phaser.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Objects/Bounds.tscn" type="PackedScene" id=8]
+
+[node name="Slide" instance=ExtResource( 1 )]
+
+[node name="Background" parent="." index="1"]
+color = Color( 0.145098, 0.156863, 0.168627, 1 )
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." index="2"]
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -500.0
+margin_right = 500.0
+mouse_filter = 2
+custom_constants/separation = 120
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" index="0"]
+margin_top = 240.0
+margin_right = 1000.0
+margin_bottom = 310.0
+mouse_filter = 2
+alignment = 1
+
+[node name="Title" type="RichTextLabel" parent="VBoxContainer/HBoxContainer" index="0"]
+margin_left = 362.0
+margin_right = 637.0
+margin_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+rect_min_size = Vector2( 275, 70 )
+rect_clip_content = false
+mouse_filter = 2
+custom_colors/default_color = Color( 0.811765, 0.219608, 0.219608, 1 )
+custom_fonts/normal_font = ExtResource( 4 )
+bbcode_enabled = true
+bbcode_text = "[wave amp=50 freq=5]Important"
+text = "Important"
+fit_content_height = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="VBoxContainer" index="1"]
+margin_top = 430.0
+margin_right = 1000.0
+margin_bottom = 516.0
+mouse_filter = 2
+custom_fonts/normal_font = ExtResource( 3 )
+text = "There is no best game engine, especially for a hobbiest. There is tons of options out there. So if any of them interest you. Go for it!"
+fit_content_height = true
+
+[node name="HSplitContainer" type="HSplitContainer" parent="VBoxContainer" index="2"]
+margin_top = 636.0
+margin_right = 1000.0
+margin_bottom = 678.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer" index="0"]
+margin_right = 355.0
+margin_bottom = 42.0
+custom_fonts/font = ExtResource( 3 )
+text = "Industry Standard - Unity"
+
+[node name="Label2" type="Label" parent="VBoxContainer/HSplitContainer" index="1"]
+margin_left = 367.0
+margin_right = 1000.0
+margin_bottom = 42.0
+custom_fonts/font = ExtResource( 3 )
+text = "Best in Class 3D visuals - Unreal"
+align = 2
+
+[node name="HSplitContainer2" type="HSplitContainer" parent="VBoxContainer" index="3"]
+margin_top = 798.0
+margin_right = 1000.0
+margin_bottom = 840.0
+
+[node name="Label" type="Label" parent="VBoxContainer/HSplitContainer2" index="0"]
+margin_right = 393.0
+margin_bottom = 42.0
+custom_fonts/font = ExtResource( 3 )
+text = "Prefer to write in JS - Phaser"
+
+[node name="Label2" type="Label" parent="VBoxContainer/HSplitContainer2" index="1"]
+margin_left = 405.0
+margin_right = 1000.0
+margin_bottom = 42.0
+custom_fonts/font = ExtResource( 3 )
+text = "Lets Find Out! - Godot"
+align = 2
+
+[node name="Node2D" type="Node2D" parent="." index="3"]
+
+[node name="Unreal" parent="Node2D" index="0" instance=ExtResource( 6 )]
+modulate = Color( 0, 0, 0, 1 )
+position = Vector2( 1550, 650 )
+mode = 1
+sleeping = true
+
+[node name="Godot" parent="Node2D" index="1" instance=ExtResource( 5 )]
+position = Vector2( 1550, 820 )
+mode = 1
+sleeping = true
+
+[node name="Unity" parent="Node2D" index="2" instance=ExtResource( 7 )]
+position = Vector2( 370, 820 )
+mode = 1
+
+[node name="Phaser" parent="Node2D" index="3" instance=ExtResource( 2 )]
+position = Vector2( 370, 650 )
+mode = 1
+
+[node name="Bounds" parent="." index="4" instance=ExtResource( 8 )]
+
+[connection signal="leaving" from="." to="Node2D/Unreal" method="_on_Slide_leaving"]
+[connection signal="leaving" from="." to="Node2D/Godot" method="_on_Slide_leaving"]
+[connection signal="leaving" from="." to="Node2D/Unity" method="_on_Slide_leaving"]
+[connection signal="leaving" from="." to="Node2D/Phaser" method="_on_Slide_leaving"]
+[connection signal="loaded" from="." to="Node2D/Unreal" method="_on_Slide_loaded"]
+[connection signal="loaded" from="." to="Node2D/Godot" method="_on_Slide_loaded"]
+[connection signal="loaded" from="." to="Node2D/Unity" method="_on_Slide_loaded"]
+[connection signal="loaded" from="." to="Node2D/Phaser" method="_on_Slide_loaded"]

@@ -10,13 +10,13 @@ anchor_bottom = 1.0
 alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" index="0"]
-margin_top = 293.0
-margin_right = 1024.0
-margin_bottom = 307.0
+margin_top = 533.0
+margin_right = 1920.0
+margin_bottom = 547.0
 alignment = 1
 
 [node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" index="0"]
-margin_left = 483.0
-margin_right = 540.0
+margin_left = 931.0
+margin_right = 988.0
 margin_bottom = 14.0
 text = "Details 1"

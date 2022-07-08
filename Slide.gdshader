@@ -1,103 +1,32 @@
+// HSV to RBG from https://www.rapidtables.com/convert/color/hsv-to-rgb.html
+// Rotation matrix from https://en.wikipedia.org/wiki/Rotation_matrix
+
 shader_type canvas_item;
 
-// Let's start with some Ashima noise
-vec3 mod289(vec3 x) {
-  return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
+const float PI = 3.1415926535;
 
-vec2 mod289_v2(vec2 x) {
-  return x - floor(x * (1.0 / 289.0)) * 289.0;
-}
+uniform float strength: hint_range(0., 1.) = 0.5;
+uniform float speed: hint_range(0., 10.) = 0.5;
+uniform float angle: hint_range(0., 360.) = 0.;
 
-vec3 permute(vec3 x) {
-  return mod289(((x*34.0)+1.0)*x);
-}
-
-float snoise(vec2 v)
-  {
-  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
-                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
-                     -0.577350269189626,  // -1.0 + 2.0 * C.x
-                      0.024390243902439); // 1.0 / 41.0
-// First corner
-  vec2 i  = floor(v + dot(v, C.yy) );
-  vec2 x0 = v -   i + dot(i, C.xx);
-
-// Other corners
-  vec2 i1;
-  //i1.x = step( x0.y, x0.x ); // x0.x > x0.y ? 1.0 : 0.0
-  //i1.y = 1.0 - i1.x;
-  i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
-  // x0 = x0 - 0.0 + 0.0 * C.xx ;
-  // x1 = x0 - i1 + 1.0 * C.xx ;
-  // x2 = x0 - 1.0 + 2.0 * C.xx ;
-  vec4 x12 = x0.xyxy + C.xxzz;
-  x12.xy -= i1;
-
-// Permutations
-  i = mod289_v2(i); // Avoid truncation effects in permutation
-  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
-		+ i.x + vec3(0.0, i1.x, 1.0 ));
-
-  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy), dot(x12.zw,x12.zw)), 0.0);
-  m = m*m ;
-  m = m*m ;
-
-// Gradients: 41 points uniformly over a line, mapped onto a diamond.
-// The ring size 17*17 = 289 is close to a multiple of 41 (41*7 = 287)
-
-  vec3 x = 2.0 * fract(p * C.www) - 1.0;
-  vec3 h = abs(x) - 0.5;
-  vec3 ox = floor(x + 0.5);
-  vec3 a0 = x - ox;
-
-// Normalise gradients implicitly by scaling m
-// Approximation of: m *= inversesqrt( a0*a0 + h*h );
-  m *= 1.79284291400159 - 0.85373472095314 * ( a0*a0 + h*h );
-
-// Compute final noise value at P
-  vec3 g;
-  g.x  = a0.x  * x0.x  + h.x  * x0.y;
-  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
-  return 130.0 * dot(m, g);
-}
-
-// End of Ashima noise!
-
-float noise(vec2 p) {
-    return snoise(p);// + snoise(p + snoise(p));
-//    return (snoise(p) * 64.0 + snoise(p * 2.0) * 32.0 + snoise(p * 4.0) * 16.0 + snoise(p * 8.0) * 8.0 + snoise(p * 16.0) * 4.0 + snoise(p * 32.0) * 2.0 + snoise(p * 64.0)) / (1.0 + 2.0 + 4.0 + 8.0 + 16.0 + 32.0 + 64.0);
-}
-
-float level(float source) {
-    const float iterations = 5.0;
-    float val = 0.0;
-    float number = 1.0 / iterations;
-    for (float i = 0.0; i < iterations; i++) {
-//        val += smoothstep(source, i * number, (i + 1.0) * number);
-        val += step(source, i * number);
-    }
-    return val / iterations;
-}
-
-const vec3 green = vec3(.0859375, .625, .51953125);
-
-void fragment()
-{
-   	vec2 uv = UV / (1.0 / SCREEN_PIXEL_SIZE);
-    float time = TIME * 0.3;
-
-    float t = noise(uv) + noise(uv + time);
-    vec3 color;
-
-    float l = length(uv);
-    vec3 col = vec3(level(t * l));
-    color = col * green;
-    
-    vec2 pos = uv;
-    pos -= vec2(0.5);
-    pos *= pow(length(pos), 0.5);
-    pos += vec2(0.5);
-    
-    COLOR = vec4(color, 1.0);
+void fragment() {
+	float hue = UV.x * cos(radians(angle)) - UV.y * sin(radians(angle));
+	hue = fract(hue + fract(TIME  * speed));
+	float x = 1. - abs(mod(hue / (1./ 6.), 2.) - 1.);
+	vec3 rainbow;
+	if(hue < 1./6.){
+		rainbow = vec3(1., x, 0.);
+	} else if (hue < 1./3.) {
+		rainbow = vec3(x, 1., 0);
+	} else if (hue < 0.5) {
+		rainbow = vec3(0, 1., x);
+	} else if (hue < 2./3.) {
+		rainbow = vec3(0., x, 1.);
+	} else if (hue < 5./6.) {
+		rainbow = vec3(x, 0., 1.);
+	} else {
+		rainbow = vec3(1., 0., x);
+	}
+	vec4 color = texture(TEXTURE, UV);
+	COLOR = mix(color, vec4(rainbow, color.a), strength);
 }
