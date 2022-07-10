@@ -3,7 +3,7 @@ extends RigidBody2D
 var selected = false
 var offset
 
-export var speed = 5
+export var speed = 10
 
 func _on_RigidBody2D_input_event(viewport, event, shape_idx):
 	if Input.is_action_just_pressed("Select"):

@@ -6,6 +6,8 @@ var current: Control
 var prev: Control
 var direction: int
 
+export var duration = 0.4
+
 func transition(new_prev: Control, new_current: Control, new_direction: int):
 	prev = new_prev
 	current = new_current
@@ -21,7 +23,7 @@ func transition(new_prev: Control, new_current: Control, new_direction: int):
 	cleanup_transition()
 
 func interpolation():
-	interpolate_method(self, "interpolate", get_viewport().get_visible_rect().size.x, 0, 0.2, Tween.TRANS_EXPO, Tween.EASE_IN)
+	interpolate_method(self, "interpolate", get_viewport().get_visible_rect().size.x, 0, duration, Tween.TRANS_LINEAR, Tween.EASE_IN_OUT)
 
 func setup_transition():
 	pass
