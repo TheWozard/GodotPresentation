@@ -8,9 +8,10 @@ const float PI = 3.1415926535;
 uniform float strength: hint_range(0., 1.) = 0.5;
 uniform float speed: hint_range(0., 10.) = 0.5;
 uniform float angle: hint_range(0., 360.) = 0.;
+uniform float size: hint_range(0., 360.) = 1;
 
 void fragment() {
-	float hue = UV.x * cos(radians(angle)) - UV.y * sin(radians(angle));
+	float hue = (UV.x * cos(radians(angle)) - UV.y * sin(radians(angle))) * size;
 	hue = fract(hue + fract(TIME  * speed));
 	float x = 1. - abs(mod(hue / (1./ 6.), 2.) - 1.);
 	vec3 rainbow;
